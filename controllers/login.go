@@ -26,10 +26,6 @@ func ValidateLogin(w http.ResponseWriter, r *http.Request) {
 	resp := FindOne(user.Email, user.Password)
 	json.NewEncoder(w).Encode(resp)
 
-	// Comparing the password with the hash
-	//err = bcrypt.CompareHashAndPassword(hashedPassword, password)
-	//fmt.Println(err) // nil means it is a match
-
 }
 
 func FindOne(email, password string) map[string]interface{} {

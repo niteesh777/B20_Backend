@@ -99,45 +99,10 @@ func importIntoPostgresDb(a int, b int) bool {
 			continue
 		}
 
-		// fmt.Println(reflect.TypeOf(result.Path("bugs.qa_contact_detail").Data()))
-		// fmt.Println(reflect.TypeOf(x))
-		// fmt.Println(reflect.TypeOf(result.Path("bugs.qa_contact_detail").Data()) != reflect.TypeOf(x))
-		// fmt.Println("=========================================")
-		// if reflect.TypeOf(result.Path("bugs.qa_contact_detail").Data()) != reflect.TypeOf(x) {
-		// 	qk := (result.Path("bugs.qa_contact_detail").Data().([]interface{})[0]).(map[string]interface{})
-		// 	qck = initializeContactInfo(qk)
-		// 	qa := Db.First(&qinfo, qck.Id)
-		// 	if qa.RowsAffected == 0 {
-		// 		Db.Create(&qck)
-		// 	}
-		// }
-
 		qa_contact_detail := checkData("bugs.qa_contact_detail", result)
 		creator_detail := checkData("bugs.creator_detail", result)
 		assigned_to_detail := checkData("bugs.assigned_to_detail", result)
-		// fmt.Println("=========================================")
-		// var cck models.ContactInfo
-		// var cinfo models.ContactInfo
-		// if reflect.TypeOf(result.Path("bugs.creator_detail").Data()) != reflect.TypeOf(x) {
-		// 	ck := (result.Path("bugs.creator_detail").Data().([]interface{})[0]).(map[string]interface{})
-		// 	cck = initializeContactInfo(ck)
-		// 	cd := Db.First(&cinfo, cck.Id)
-		// 	if cd.RowsAffected == 0 {
-		// 		Db.Create(&cck)
-		// 	}
-		// }
-		// fmt.Println("=========================================")
-		// var ack models.ContactInfo
-		// var ainfo models.ContactInfo
-		// if reflect.TypeOf(result.Path("bugs.assigned_to_detail").Data()) != reflect.TypeOf(x) {
-		// 	ak := (result.Path("bugs.assigned_to_detail").Data().([]interface{})[0]).(map[string]interface{})
-		// 	ack = initializeContactInfo(ak)
-		// 	ad := Db.First(&ainfo, ack.Id)
-		// 	if ad.RowsAffected == 0 {
-		// 		Db.Create(&ack)
-		// 	}
-		// }
-		// fmt.Println("=========================================")
+
 		last_change_time := result.Path("bugs.last_change_time").Data().([]interface{})[0].(string)
 		creation_time := result.Path("bugs.creation_time").Data().([]interface{})[0].(string)
 
