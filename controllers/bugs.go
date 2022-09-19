@@ -109,3 +109,20 @@ func GetBugPages(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(bugs)
 }
+
+func EditBug(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	bug := &models.Bug{}
+	err := json.NewDecoder(r.Body).Decode(bug)
+
+	if err != nil {
+		var resp = map[string]interface{}{"status": false, "message": "Invalid request"}
+		json.NewEncoder(w).Encode(resp)
+		return
+	}
+
+	Db.Model(&bug).Where("Id = ?", bug.Id).Updates(&bug)
+
+	json.NewEncoder(w).Encode(bug)
+}
