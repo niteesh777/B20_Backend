@@ -2,6 +2,7 @@ package routes
 
 import (
 	"B20_Backend/controllers"
+	"B20_Backend/utils"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -9,18 +10,23 @@ import (
 
 func Handlers() *mux.Router {
 
-	r := mux.NewRouter()
+	r := mux.NewRouter().StrictSlash(true)
 	r.HandleFunc("/bug/{id}", controllers.GetBug).Methods("GET")
 	r.HandleFunc("/importData/{start}/{range}", controllers.ImportData).Methods("GET")
 	r.HandleFunc("/importLogin", controllers.ImportintoLogin).Methods("GET")
-	r.HandleFunc("/bug/assigned/{userId}", controllers.GetAssignedBugs).Methods("GET")
-	r.HandleFunc("/bug/created/{userId}", controllers.GetCreatedBug).Methods("GET")
-	r.HandleFunc("/bug/qaRelated/{userId}", controllers.GetRelatedBug).Methods("GET")
-	r.HandleFunc("/bug/all/{userId}", controllers.GetAllBugs).Methods("GET")
 	r.HandleFunc("/bugPages", controllers.GetBugPages).Methods("GET")
-	// r.HandleFunc("/bugshistory", GetBugHistory)
 	r.HandleFunc("/signup", controllers.Register).Methods("POST")
 	r.HandleFunc("/login", controllers.ValidateLogin).Methods("POST")
+
+	s := r.PathPrefix("/auth").Subrouter()
+	s.Use(utils.JwtVerify)
+	s.HandleFunc("/bug/assigned/{userId}", controllers.GetAssignedBugs).Methods("GET")
+	s.HandleFunc("/bug/created/{userId}", controllers.GetCreatedBug).Methods("GET")
+	s.HandleFunc("/bug/qaRelated/{userId}", controllers.GetRelatedBug).Methods("GET")
+	s.HandleFunc("/bug/all/{userId}", controllers.GetAllBugs).Methods("GET")
+
+	// r.HandleFunc("/bugshistory", GetBugHistory)
+
 	// log.Fatal(http.ListenAndServe(":7000", r))
 
 	return r
