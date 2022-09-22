@@ -38,6 +38,18 @@ func GetBug(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func GetBugInfoLocal(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	id := params["id"]
+
+	var bug models.Bug
+	Db.Where("id = ?", id).Preload("Qa_contact").Preload("Creator_detail").Preload("Assigned_to_detail").Find(&bug)
+
+	json.NewEncoder(w).Encode(bug)
+
+}
+
 func GetAssignedBugs(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")

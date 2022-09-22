@@ -3,9 +3,6 @@ package controllers
 import (
 	"B20_Backend/models"
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -14,8 +11,8 @@ import (
 func EditProfile(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	bug := &models.Bug{}
-	err := json.NewDecoder(r.Body).Decode(bug)
+	user := &models.User{}
+	err := json.NewDecoder(r.Body).Decode(user)
 
 	if err != nil {
 		var resp = map[string]interface{}{"status": false, "message": "Invalid request"}
@@ -23,31 +20,19 @@ func EditProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	Db.Model(&bug).Where("Id = ?", bug.Id).Updates(&bug)
+	Db.Model(&user).Where("user_id = ?", user.UserId).Updates(&user)
 
-	json.NewEncoder(w).Encode(bug)
+	json.NewEncoder(w).Encode(user)
 }
 
-func GetProfile(w http.ResponseWriter, r *http.Request) {
-
+func GetProfileInfoLocal(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
-	getUrl := Url + "bug?id=" + params["id"]
+	id := params["id"]
 
-	fmt.Println(getUrl)
+	var user models.User
+	Db.Where("user_id = ?", id).Find(&user)
 
-	response, err := http.Get(getUrl)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	responseData, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var resmar any
-	json.Unmarshal(responseData, &resmar)
-	json.NewEncoder(w).Encode(resmar)
+	json.NewEncoder(w).Encode(user)
 
 }

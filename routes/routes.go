@@ -24,7 +24,11 @@ func Handlers() *mux.Router {
 	s.HandleFunc("/bug/created/{userId}", controllers.GetCreatedBug).Methods("GET")
 	s.HandleFunc("/bug/qaRelated/{userId}", controllers.GetRelatedBug).Methods("GET")
 	s.HandleFunc("/bug/all/{userId}", controllers.GetAllBugs).Methods("GET")
+	s.HandleFunc("/editprofile/", controllers.EditProfile).Methods("PUT")
 	s.HandleFunc("/bug/editBug/", controllers.EditBug).Methods("PUT")
+	s.HandleFunc("/bug/BugInfo/{id}", controllers.GetBugInfoLocal).Methods("GET")
+	s.HandleFunc("/ProfileInfo/{id}", controllers.GetProfileInfoLocal).Methods("GET")
+
 	// r.HandleFunc("/bugshistory", GetBugHistory)
 
 	// log.Fatal(http.ListenAndServe(":7000", r))
