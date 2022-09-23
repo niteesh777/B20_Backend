@@ -38,6 +38,18 @@ func GetBug(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func GetBugInfoLocal(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	id := params["id"]
+
+	var bug models.Bug
+	Db.Where("id = ?", id).Preload("Qa_contact").Preload("Creator_detail").Preload("Assigned_to_detail").Find(&bug)
+
+	json.NewEncoder(w).Encode(bug)
+
+}
+
 func GetAssignedBugs(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
@@ -108,4 +120,21 @@ func GetBugPages(w http.ResponseWriter, r *http.Request) {
 	Db.Order(sortBy).Offset((page - 1) * pageSize).Limit(pageSize).Preload("Qa_contact").Preload("Creator_detail").Preload("Assigned_to_detail").Find(&bugs)
 
 	json.NewEncoder(w).Encode(bugs)
+}
+
+func EditBug(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	bug := &models.Bug{}
+	err := json.NewDecoder(r.Body).Decode(bug)
+
+	if err != nil {
+		var resp = map[string]interface{}{"status": false, "message": "Invalid request"}
+		json.NewEncoder(w).Encode(resp)
+		return
+	}
+
+	Db.Model(&bug).Where("Id = ?", bug.Id).Updates(&bug)
+
+	json.NewEncoder(w).Encode(bug)
 }
