@@ -11,6 +11,7 @@ import (
 func Handlers() *mux.Router {
 
 	r := mux.NewRouter().StrictSlash(true)
+	r.Use(CommonMiddleware)
 	r.HandleFunc("/bug/{id}", controllers.GetBug).Methods("GET")
 	r.HandleFunc("/importData/{start}/{range}", controllers.ImportData).Methods("GET")
 	r.HandleFunc("/importLogin", controllers.ImportintoLogin).Methods("GET")

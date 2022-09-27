@@ -56,8 +56,16 @@ func GetAssignedBugs(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	userId := params["userId"]
 
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("pageSize"))
+	sortBy := r.URL.Query().Get("sortBy")
+
+	if sortBy == "" {
+		sortBy = "id"
+	}
+
 	var bugs []models.Bug
-	Db.Where("assigned_to_detail_id = ?", userId).Preload("Qa_contact").Preload("Creator_detail").Preload("Assigned_to_detail").Find(&bugs)
+	Db.Where("assigned_to_detail_id = ?", userId).Order(sortBy).Offset((page - 1) * pageSize).Limit(pageSize).Preload("Qa_contact").Preload("Creator_detail").Preload("Assigned_to_detail").Find(&bugs)
 
 	json.NewEncoder(w).Encode(bugs)
 
@@ -95,8 +103,16 @@ func GetAllBugs(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	userId := params["userId"]
 
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("pageSize"))
+	sortBy := r.URL.Query().Get("sortBy")
+
+	if sortBy == "" {
+		sortBy = "id"
+	}
+
 	var bugs []models.Bug
-	Db.Where("assigned_to_detail_id = ?", userId).Or("creator_detail_id = ?", userId).Or("qa_contact_id = ?", userId).Preload("Qa_contact").Preload("Creator_detail").Preload("Assigned_to_detail").Find(&bugs)
+	Db.Where("assigned_to_detail_id = ?", userId).Order(sortBy).Offset((page-1)*pageSize).Limit(pageSize).Or("creator_detail_id = ?", userId).Or("qa_contact_id = ?", userId).Preload("Qa_contact").Preload("Creator_detail").Preload("Assigned_to_detail").Find(&bugs)
 
 	json.NewEncoder(w).Encode(bugs)
 
