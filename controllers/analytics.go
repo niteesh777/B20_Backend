@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 func GetBugsThroughYear(w http.ResponseWriter, r *http.Request) {
@@ -87,5 +89,26 @@ func GetBugsByMonth(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(analytics)
+
+}
+
+func GetBugsProgress(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	params := mux.Vars(r)
+	id := params["id"]
+
+	var bugs []models.Bug
+	resultAll := Db.Where("assigned_to_detail_id = ?", id).Find(&bugs)
+	resultVerified := Db.Where("assigned_to_detail_id = ?", id).Where("status = ?", "VERIFIED").Find(&bugs)
+	resultResolved := Db.Where("assigned_to_detail_id = ?", id).Where("status = ?", "RESOLVED").Find(&bugs)
+
+	progress := map[string]int64{
+		"VERIFIED": resultVerified.RowsAffected,
+		"RESOLVED": resultResolved.RowsAffected,
+		"ALL":      resultAll.RowsAffected,
+	}
+
+	json.NewEncoder(w).Encode(progress)
 
 }

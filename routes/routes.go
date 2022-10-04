@@ -12,12 +12,17 @@ func Handlers() *mux.Router {
 
 	r := mux.NewRouter().StrictSlash(true)
 	r.Use(CommonMiddleware)
-	r.HandleFunc("/bug/{id}", controllers.GetBug).Methods("GET")
+	r.HandleFunc("/bug/{id}", controllers.GetBugLocalFormat).Methods("GET")
 	r.HandleFunc("/importData/{start}/{range}", controllers.ImportData).Methods("GET")
 	r.HandleFunc("/importLogin", controllers.ImportintoLogin).Methods("GET")
 	r.HandleFunc("/bugPages", controllers.GetBugPages).Methods("GET")
 	r.HandleFunc("/signup", controllers.Register).Methods("POST")
 	r.HandleFunc("/login", controllers.ValidateLogin).Methods("POST")
+
+	r.HandleFunc("/auth/bugsProgress/{id}", controllers.GetBugsProgress).Methods("GET")
+	r.HandleFunc("/auth/createPreference", controllers.CreatePreferenceUsers).Methods("GET")
+	r.HandleFunc("/auth/getPreference/{id}", controllers.GetPreference).Methods("GET")
+	r.HandleFunc("/auth/editPreference/{id}", controllers.EditPreference).Methods("PUT")
 
 	s := r.PathPrefix("/auth").Subrouter()
 	s.Use(utils.JwtVerify)
