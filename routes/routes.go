@@ -23,6 +23,8 @@ func Handlers() *mux.Router {
 	r.HandleFunc("/auth/createPreference", controllers.CreatePreferenceUsers).Methods("GET")
 	r.HandleFunc("/auth/getPreference/{id}", controllers.GetPreference).Methods("GET")
 	r.HandleFunc("/auth/editPreference/{id}", controllers.EditPreference).Methods("PUT")
+	r.HandleFunc("/filterByDate", controllers.GetBugsByDate).Methods("GET")
+	r.HandleFunc("/filterByWeek", controllers.GetBugsOfThisWeek).Methods("GET")
 
 	s := r.PathPrefix("/auth").Subrouter()
 	s.Use(utils.JwtVerify)
