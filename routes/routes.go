@@ -22,7 +22,7 @@ func Handlers() *mux.Router {
 	r.HandleFunc("/auth/bug/BugInfo/{id}", controllers.GetBugInfoLocal).Methods("GET")
 	r.HandleFunc("/bug/{id}", controllers.GetBugLocalFormat).Methods("GET")
 	r.HandleFunc("/auth/ProfileInfo/{id}", controllers.GetProfileInfoLocal).Methods("GET")
-	r.HandleFunc("/auth/editprofile", controllers.GetProfileInfoLocal).Methods("PUT")
+	r.HandleFunc("/auth/editprofile", controllers.GetProfileInfoLocal).Methods("POST")
 	// r.HandleFunc("/auth/editprofile/", controllers.EditProfile).Methods("PUT")
 
 	//analytics
@@ -37,7 +37,7 @@ func Handlers() *mux.Router {
 	//preferences
 	r.HandleFunc("/auth/createPreference", controllers.CreatePreferenceUsers).Methods("GET")
 	r.HandleFunc("/auth/getPreference/{id}", controllers.GetPreference).Methods("GET")
-	r.HandleFunc("/auth/editPreference/{id}", controllers.EditPreference).Methods("PUT")
+	r.HandleFunc("/auth/editPreference/{id}", controllers.EditPreference).Methods("POST")
 
 
 

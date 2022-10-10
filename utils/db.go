@@ -41,6 +41,7 @@ func ConnectToDb() *gorm.DB {
 	Db.AutoMigrate(&models.Bug{})
 	Db.AutoMigrate(&models.ContactInfo{})
 	Db.AutoMigrate(&models.User{})
+	Db.AutoMigrate(&models.BugPreference{})
 
 	return Db
 

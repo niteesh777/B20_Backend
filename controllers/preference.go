@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-
+	"fmt"
 	"github.com/gorilla/mux"
 )
 
@@ -18,25 +18,25 @@ func createPreference(userId int) {
 
 		var value = models.BugPreference{
 			UserID:        userId,
-			Comment_count: true,
+			Comment_count: false,
 			// Deadline:         result.Path("bugs.deadline").Data().([]interface{})[0].(string),
-			Type:               true,
-			Status:             true,
-			Priority:           true,
-			Severity:           true,
-			Summary:            true,
-			Product:            true,
-			Platform:           true,
-			Resolution:         true,
-			Target_milestone:   true,
-			Classification:     true,
-			Is_confirmed:       true,
-			Is_open:            true,
-			Last_change_time:   true,
-			Creation_time:      true,
-			Qa_contact:         true,
-			Creator_detail:     true,
-			Assigned_to_detail: true,
+			Type:               false,
+			Status:             false,
+			Priority:           false,
+			Severity:           false,
+			Summary:            false,
+			Product:            false,
+			Platform:           false,
+			Resolution:         false,
+			Target_milestone:   false,
+			Classification:     false,
+			Is_confirmed:       false,
+			Is_open:            false,
+			Last_change_time:   false,
+			Creation_time:      false,
+			Qa_contact:         false,
+			Creator_detail:     false,
+			Assigned_to_detail: false,
 		}
 
 		Db.Create(&value)
@@ -99,6 +99,7 @@ func EditPreference(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(resp)
 		return
 	}
+	fmt.Println(id);
 
 	Db.Model(&preference).Where("user_id = ?", id).Updates(body)
 
