@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "nodemon": "^2.0.20",
+    "react-client-session": "^0.0.8"
+  }
+}
