@@ -25,6 +25,8 @@ func Handlers() *mux.Router {
 	r.HandleFunc("/auth/editPreference/{id}", controllers.EditPreference).Methods("PUT")
 	r.HandleFunc("/filterByDate", controllers.GetBugsByDate).Methods("GET")
 	r.HandleFunc("/filterByWeek", controllers.GetBugsOfThisWeek).Methods("GET")
+	r.HandleFunc("/editprofile/{id}", controllers.EditProfile).Methods("PUT")
+	r.HandleFunc("/ProfileInfo/{id}", controllers.GetProfileInfoLocal).Methods("GET")
 
 	s := r.PathPrefix("/auth").Subrouter()
 	s.Use(utils.JwtVerify)
@@ -35,7 +37,7 @@ func Handlers() *mux.Router {
 	s.HandleFunc("/editprofile/", controllers.EditProfile).Methods("PUT")
 	s.HandleFunc("/bug/editBug/", controllers.EditBug).Methods("PUT")
 	s.HandleFunc("/bug/BugInfo/{id}", controllers.GetBugInfoLocal).Methods("GET")
-	s.HandleFunc("/ProfileInfo/{id}", controllers.GetProfileInfoLocal).Methods("GET")
+
 	//analytics
 	s.HandleFunc("/filterByYear", controllers.GetBugsThroughYear).Methods("GET")
 	s.HandleFunc("/filterByMonth", controllers.GetBugsByYear).Methods("GET")
@@ -54,6 +56,7 @@ func CommonMiddleware(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Access-Control-Request-Headers, Access-Control-Request-Method, Connection, Host, Origin, User-Agent, Referer, Cache-Control, X-header")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		next.ServeHTTP(w, r)
 	})
 }
